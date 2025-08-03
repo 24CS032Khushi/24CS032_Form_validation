@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Practical 3 - Form Validation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #eef2f7;
+      padding: 20px;
+    }
+
+    .myForm {
+      max-width: 400px;
+      background-color: #fefefe;
+      margin: 40px auto;
+      border-radius: 10px;
+      padding: 25px 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2d54b9;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #2d54b9;
+      outline: none;
+    }
+
+    .gender-group {
+      display: flex;
+      gap: 20px;
+      margin: 10px 0;
+    }
+
+    .gender-group input {
+      width: auto;
+    }
+
+    .password-strength {
+      margin: 5px 0 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .weak {
+      color: red;
+    }
+
+    .medium {
+      color: orange;
+    }
+
+    .strong {
+      color: green;
+    }
+
+    button {
+      width: 100%;
+      background-color: #2d54b9;
+      color: white;
+      font-size: 16px;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #4a68d0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="myForm">
+    <h2>Student Form</h2>
+    <form id="myForm">
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Enter your name"/>
+
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="Enter your email"/>
+
+      <label for="address">Address</label>
+      <textarea id="address" rows="3" placeholder="Enter your address..."></textarea>
+
+      <label for="dob">Date of Birth</label>
+      <input id="dob" type="date"/>
+
+      <label>Gender</label>
+      <div class="gender-group">
+        <label><input type="radio" name="gender" value="Female"/> Female</label>
+        <label><input type="radio" name="gender" value="Male"/> Male</label>
+      </div>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="Set your password"/>
+      <div class="password-strength" id="strengthMessage"></div>
+
+      <label for="confirm">Confirm Password</label>
+      <input id="confirm" type="password" placeholder="Confirm your password"/>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("myForm");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirm");
+    const strengthMessage = document.getElementById("strengthMessage");
+
+    password.addEventListener("input", function () {
+      const val = password.value;
+      let strength = "";
+
+      if (val.length < 6) {
+        strength = "<span class='weak'>Weak</span>";
+      } else if (val.match(/[A-Za-z]/) && val.match(/[0-9]/) && val.length >= 8) {
+        strength = "<span class='medium'>Medium</span>";
+      } else if (val.match(/[A-Za-z]/) && val.match(/[0-9]/) && val.match(/[@$!%*?&]/)) {
+        strength = "<span class='strong'>Strong</span>";
+      }
+
+      strengthMessage.innerHTML = strength;
+    });
+
+    form.addEventListener("submit", function (e) {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const dob = document.getElementById("dob").value;
+      const pass = password.value.trim();
+      const confirm = confirmPassword.value.trim();
+      const genderChecked = document.querySelector("input[name='gender']:checked");
+
+      if (!name || !email || !address || !dob || !pass || !confirm || !genderChecked) {
+        alert("All fields are required!");
+        e.preventDefault();
+        return;
+      }
+
+      if (pass !== confirm) {
+        alert("Passwords do not match!");
+        e.preventDefault();
+        return;
+      }
+
+      if (pass.length < 6) {
+        alert("Password should be at least 6 characters long!");
+        e.preventDefault();
+        return;
+      }
+
+
+      alert("Form Submitted Successfully!");
+    });
+  </script>
+</body>
+</html>
